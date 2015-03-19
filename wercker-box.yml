@@ -1,0 +1,15 @@
+name: wercker-box-nodejs-latex
+version: 0.0.1
+description: Ubuntu 12.04 with NodeJs and texlive-full
+inherits: wercker/ubuntu12.04-nodejs0.10
+type: main
+platform: ubuntu@12.04
+keywords:
+  - ubuntu
+  - 12.04
+  - latex
+  - texlive
+  - nodejs
+script: |
+  sudo apt-get update -qq
+  sudo apt-get install texlive-full
