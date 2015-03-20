@@ -11,5 +11,20 @@ keywords:
   - texlive
   - nodejs
 script: |
+  # https://wiki.ubuntu.com/ReducingDiskFootprint#Documentation
+  echo "path-exclude /usr/share/doc/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc
+  echo "path-include /usr/share/doc/*/copyright" >> /etc/dpkg/dpkg.cfg.d/01_nodoc
+  echo "path-exclude /usr/share/man/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc
+  echo "path-exclude /usr/share/groff/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc
+  echo "path-exclude /usr/share/info/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc
+  echo "path-exclude /usr/share/lintian/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc
+  echo "path-exclude /usr/share/linda/*" >> /etc/dpkg/dpkg.cfg.d/01_nodoc
+  find /usr/share/doc -depth -type f ! -name copyright|xargs rm || true
+  find /usr/share/doc -empty|xargs rmdir || true
+  rm -rf /usr/share/man /usr/share/groff /usr/share/info /usr/share/lintian /usr/share/linda /var/cache/man
+
   sudo apt-get update -qq
-  sudo apt-get install texlive-full
+  
+  # https://github.com/cben/wercker-box-ubuntu14.04-latex/blob/master/wercker-box.yml
+  # Install texlive-full except for *-doc packages.
+  sudo apt-get install -y $(apt-cache depends texlive-full | sed -n -e 's/-doc$/-doc-/' -e 's/ *Depends: //p') biber make latexmk
