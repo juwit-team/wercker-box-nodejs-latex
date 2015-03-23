@@ -24,6 +24,21 @@ script: |
   sudo sh -c "rm -rf /usr/share/man /usr/share/groff /usr/share/info /usr/share/lintian /usr/share/linda /var/cache/man"
 
   sudo apt-get update -qq
+
+  # Install node build dependencies
+  sudo apt-get install python g++
+
+  # Install NodeJS v0.12 from source
+  mkdir node-js
+  cd node-js
+  wget nodejs.org/dist/v0.12.0/node-v0.12.0.tar.gz
+  tar -xzf node-v0.12.0.tar.gz
+  cd node-v0.12.0
+  sudo ./configure
+  sudo make
+  sudo make install
+  cd ..
+  sudo rm -rf node-js
   
   # https://github.com/cben/wercker-box-ubuntu14.04-latex/blob/master/wercker-box.yml
   # Install texlive-full except for *-doc packages.
