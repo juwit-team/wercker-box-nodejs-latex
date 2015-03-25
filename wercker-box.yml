@@ -1,5 +1,5 @@
 name: wercker-box-nodejs-latex
-version: 1.1.0
+version: 1.1.1
 description: Ubuntu 12.04 with NodeJs and texlive-full
 inherits: wercker/ubuntu12.04-webessentials@1.0.4
 type: main
@@ -49,3 +49,6 @@ script: |
   # https://github.com/cben/wercker-box-ubuntu14.04-latex/blob/master/wercker-box.yml
   # Install texlive-full except for *-doc packages.
   sudo apt-get install -y $(apt-cache depends texlive-full | sed -n -e 's/-doc$/-doc-/' -e 's/ *Depends: //p')
+  
+  # generate key without passphrase, we will only grant read-only access to machine user
+  ssh-keygen -t rsa -f ~/.ssh/id_rsa -C "juwit-team@trash-mail.com" -q -N ""
